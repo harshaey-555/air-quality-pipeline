@@ -44,15 +44,17 @@ def fetch_and_clean_data():
 
 # Execute the function
 record = fetch_and_clean_data()
-
+# --- Load into PostgreSQL ---
 if record:
-    # 4. Load the dictionary into a Pandas DataFrame
     df = pd.DataFrame([record])
-    print("\n--- Cleaned DataFrame ---")
-    print("\nConnecting to database...")
-engine = create_engine(DB_URL)
-
-# Push the DataFrame to a table named 'air_quality'
-df.to_sql("air_quality", engine, if_exists="append", index=False)
-
-print("Success! Data loaded into PostgreSQL.")
+    print("\nCleaned DataFrame:")
+    print(df)
+    
+    print("\nConnecting to Neon PostgreSQL...")
+    engine = create_engine(DB_URL)
+    
+    
+    df.to_sql("air_quality", engine, if_exists="append", index=False)
+    print("Success! Row inserted into Neon database.")
+else:
+    print("Skipping database insertion because extraction failed.")
